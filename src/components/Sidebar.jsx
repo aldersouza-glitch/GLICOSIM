@@ -38,6 +38,15 @@ const Sidebar = () => {
         <div className="user-info">
           <span className="user-name">Perfil Principal</span>
           <span className="user-email">Acompanhamento</span>
+          <button className="logout-btn" onClick={() => { 
+            if(window.confirm('CUIDADO: Tem certeza que deseja apagar TODOS os dados salvos nesta semana? Essa ação zerará o app para você começar um acompanhamento limpo!')) { 
+              localStorage.clear(); 
+              window.location.reload(); 
+            }
+          }}>
+            <LogOut size={16} />
+            <span>Zerar Dados</span>
+          </button>
         </div>
       </div>
     </aside>
