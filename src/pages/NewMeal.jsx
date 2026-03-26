@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Utensils } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { format } from 'date-fns';
 
 const NewMeal = () => {
-  const { addMeal } = useData();
+  const { addMeal, updateMeal, mealRecords } = useData();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const [formData, setFormData] = useState({
     time: format(new Date(), 'HH:mm'),
@@ -16,17 +17,38 @@ const NewMeal = () => {
     notes: ''
   });
 
+  useEffect(() => {
+    if (id) {
+      const existing = mealRecords.find(r => r.id === id);
+      if (existing) {
+        setFormData({
+          time: existing.time,
+          type: existing.type || 'Café da Manhã',
+          food: existing.food,
+          date: existing.date,
+          notes: existing.notes || ''
+        });
+      }
+    }
+  }, [id, mealRecords]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.food) return;
 
-    addMeal({
+    const recordPayload = {
       time: formData.time,
       type: formData.type,
       food: formData.food,
       date: formData.date,
       notes: formData.notes
-    });
+    };
+
+    if (id) {
+      updateMeal(id, recordPayload);
+    } else {
+      addMeal(recordPayload);
+    }
 
     navigate('/history');
   };
@@ -34,7 +56,7 @@ const NewMeal = () => {
   return (
     <div className="animated">
       <header className="page-header" style={{ justifyContent: 'center' }}>
-        <h1 className="page-title">Nova Refeição</h1>
+        <h1 className="page-title">{id ? "Editar Refeição" : "Nova Refeição"}</h1>
       </header>
 
       <div className="form-container">
@@ -110,7 +132,7 @@ const NewMeal = () => {
             </div>
 
             <button type="submit" className="btn-primary btn-orange">
-              Salvar Refeição
+              {id ? "Salvar Alterações" : "Salvar Refeição"}
             </button>
           </form>
         </div>

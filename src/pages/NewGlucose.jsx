@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Activity } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { format } from 'date-fns';
 
 const NewGlucose = () => {
-  const { addGlucose } = useData();
+  const { addGlucose, updateGlucose, glucoseRecords } = useData();
   const navigate = useNavigate();
+  const { id } = useParams();
   
   const [formData, setFormData] = useState({
     value: '',
@@ -16,17 +17,38 @@ const NewGlucose = () => {
     notes: ''
   });
 
+  useEffect(() => {
+    if (id) {
+      const existing = glucoseRecords.find(r => r.id === id);
+      if (existing) {
+        setFormData({
+          value: existing.value,
+          time: existing.time,
+          date: existing.date,
+          type: existing.type || 'jejum',
+          notes: existing.notes || ''
+        });
+      }
+    }
+  }, [id, glucoseRecords]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.value) return;
     
-    addGlucose({
+    const recordPayload = {
       value: Number(formData.value),
       time: formData.time,
       date: formData.date,
       type: formData.type,
       notes: formData.notes
-    });
+    };
+
+    if (id) {
+      updateGlucose(id, recordPayload);
+    } else {
+      addGlucose(recordPayload);
+    }
     
     navigate('/history');
   };
@@ -34,7 +56,7 @@ const NewGlucose = () => {
   return (
     <div className="animated">
       <header className="page-header" style={{ justifyContent: 'center' }}>
-        <h1 className="page-title">Nova Medição</h1>
+        <h1 className="page-title">{id ? "Editar Medição" : "Nova Medição"}</h1>
       </header>
 
       <div className="form-container">
@@ -107,7 +129,7 @@ const NewGlucose = () => {
             </div>
 
             <button type="submit" className="btn-primary">
-              Salvar Medição
+              {id ? "Salvar Alterações" : "Salvar Medição"}
             </button>
           </form>
         </div>

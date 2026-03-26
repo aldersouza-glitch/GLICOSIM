@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useData } from '../context/DataContext';
+import { useNavigate } from 'react-router-dom';
+import { Edit2, Trash2 } from 'lucide-react';
 
 const History = () => {
   const [activeTab, setActiveTab] = useState('glucose');
-  const { glucoseRecords, mealRecords } = useData();
+  const { glucoseRecords, mealRecords, deleteGlucose, deleteMeal } = useData();
+  const navigate = useNavigate();
 
   const getDateLabel = (dateStr) => {
     const [year, month, day] = dateStr.split('-');
@@ -66,8 +69,12 @@ const History = () => {
                     (record.type === 'jejum' && record.value > 95) || 
                     (record.type === 'pos' && record.value > 140) ||
                     (!record.type && record.value > 110) ? 'high' : 'normal'
-                  }`}>
-                  {record.value} mg/dL
+                  }`} style={{ textAlign: 'right' }}>
+                  <div style={{ marginBottom: '0.25rem' }}>{record.value} mg/dL</div>
+                  <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                    <button onClick={() => navigate(`/glucose/edit/${record.id}`)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}><Edit2 size={16} /></button>
+                    <button onClick={() => { if(window.confirm('Excluir medição?')) deleteGlucose(record.id); }} style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer' }}><Trash2 size={16} /></button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -81,6 +88,10 @@ const History = () => {
                 <div className="list-item-content">
                   <span className="list-item-title">{record.time} - {record.type ? `[${record.type}] ` : ''}{record.food}</span>
                   <span className="list-item-desc">{getDateLabel(record.date)} {record.notes ? `| ${record.notes}` : ''}</span>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button onClick={() => navigate(`/meal/edit/${record.id}`)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}><Edit2 size={16} /></button>
+                  <button onClick={() => { if(window.confirm('Excluir refeição?')) deleteMeal(record.id); }} style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer' }}><Trash2 size={16} /></button>
                 </div>
               </div>
             ))}
