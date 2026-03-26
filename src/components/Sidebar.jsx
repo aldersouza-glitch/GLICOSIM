@@ -5,10 +5,10 @@ const Sidebar = () => {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
-        <div className="logo-icon">
-          <Droplet size={20} fill="currentColor" />
+        <div className="logo-icon" style={{ borderRadius: '4px' }}>
+          <Droplet size={20} fill="white" color="white" strokeWidth={2.5} />
         </div>
-        <span className="logo-text">GlicoTrack</span>
+        <span className="logo-text">Glico<span style={{ color: 'var(--primary)' }}>SIM</span></span>
       </div>
 
       <nav className="nav-links">
@@ -34,9 +34,11 @@ const Sidebar = () => {
       </nav>
 
       <div className="auth-user">
-        <div className="user-avatar">U</div>
+        <div className="user-avatar" style={{ backgroundColor: 'var(--primary)' }}>
+          {localStorage.getItem('glicotrack_user') ? localStorage.getItem('glicotrack_user')[0] : 'U'}
+        </div>
         <div className="user-info">
-          <span className="user-name">Perfil Principal</span>
+          <span className="user-name">{localStorage.getItem('glicotrack_user') || 'Usuário'}</span>
           <span className="user-email">Acompanhamento</span>
         </div>
       </div>
