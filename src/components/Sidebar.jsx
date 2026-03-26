@@ -34,14 +34,10 @@ const Sidebar = () => {
       </nav>
 
       <div className="auth-user">
-        <div className="user-avatar">A</div>
+        <div className="user-avatar">U</div>
         <div className="user-info">
-          <span className="user-name">Alder Brunno</span>
-          <span className="user-email">alder.sousa@gmail.com</span>
-          <button className="logout-btn">
-            <LogOut size={16} />
-            <span>Sair</span>
-          </button>
+          <span className="user-name">Perfil Principal</span>
+          <span className="user-email">Acompanhamento</span>
         </div>
       </div>
     </aside>

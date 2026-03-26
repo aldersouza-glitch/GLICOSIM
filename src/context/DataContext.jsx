@@ -10,33 +10,27 @@ export const useData = () => {
   return context;
 };
 
-const initialGlucoseData = [
-  { id: '1', value: 95, time: '08:00', date: new Date().toISOString().split('T')[0], notes: 'Após acordar' },
-  { id: '2', value: 110, time: '11:00', date: new Date().toISOString().split('T')[0], notes: '' },
-  { id: '3', value: 105, time: '14:00', date: new Date().toISOString().split('T')[0], notes: 'Após o almoço' },
-  { id: '4', value: 120, time: '18:00', date: new Date().toISOString().split('T')[0], notes: '' },
-  { id: '5', value: 100, time: '21:00', date: new Date().toISOString().split('T')[0], notes: 'Antes de dormir' },
-];
+const initialGlucoseData = [];
 
 export const DataProvider = ({ children }) => {
   const [glucoseRecords, setGlucoseRecords] = useState(() => {
-    const saved = localStorage.getItem('glico_glucose');
+    const saved = localStorage.getItem('glicotrack_glucose_v2');
     if (saved) return JSON.parse(saved);
     return initialGlucoseData;
   });
 
   const [mealRecords, setMealRecords] = useState(() => {
-    const saved = localStorage.getItem('glico_meals');
+    const saved = localStorage.getItem('glicotrack_meals_v2');
     if (saved) return JSON.parse(saved);
     return [];
   });
 
   useEffect(() => {
-    localStorage.setItem('glico_glucose', JSON.stringify(glucoseRecords));
+    localStorage.setItem('glicotrack_glucose_v2', JSON.stringify(glucoseRecords));
   }, [glucoseRecords]);
 
   useEffect(() => {
-    localStorage.setItem('glico_meals', JSON.stringify(mealRecords));
+    localStorage.setItem('glicotrack_meals_v2', JSON.stringify(mealRecords));
   }, [mealRecords]);
 
   const addGlucose = (record) => {

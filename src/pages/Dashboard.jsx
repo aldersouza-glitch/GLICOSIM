@@ -95,7 +95,7 @@ const Dashboard = () => {
     <div className="animated">
       <header className="page-header">
         <div>
-          <h1 className="page-title">Olá, Alder</h1>
+          <h1 className="page-title">Bem-vindo(a)!</h1>
           <p className="page-subtitle">Aqui está o resumo da sua saúde hoje.</p>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
